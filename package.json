@@ -1,0 +1,23 @@
+{
+  "name": "mma-tcg-server-side",
+  "version": "0.0.1",
+  "description": "server side mma-tcg",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ben-scully/mma-tcg-server-side.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ben-scully/mma-tcg-server-side/issues"
+  },
+  "homepage": "https://github.com/ben-scully/mma-tcg-server-side#readme",
+  "dependencies": {
+    "hapi": "^13.3.0",
+    "inert": "^3.2.0"
+  }
+}
