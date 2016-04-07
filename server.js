@@ -43,38 +43,38 @@ server.route({
 			//early return for if array is empty
 			if (computerDeck.length < 1) {
 				reply('Error: No cards left').code(400)
-			}
+			} else {
 
-			//read the current score
-			fs.readFile('./data/score.json', (err, data) => {
-				var currentScore = JSON.parse(data)
-				//pops off the card the computer will play and compares it to the players submitted card
-				var computerCard = computerDeck.pop()
-				//TEST check whether needs parsing
-				var playerCard = JSON.parse(request.payload)
+				//read the current score
+				fs.readFile('./data/score.json', (err, data) => {
+					var currentScore = JSON.parse(data)
+					//pops off the card the computer will play and compares it to the players submitted card
+					var computerCard = computerDeck.pop()
+					//TEST check whether needs parsing
+					var playerCard = JSON.parse(request.payload)
 
-				if (parseInt(computerCard.rating) > parseInt(playerCard.rating)) {
-					currentScore.p2 += 1
-				}
-				else {
-					currentScore.p1 += 1
-				}
-				//TEST add callbacks for savescore and savecomputerdeck and nest reply inside there
-				//TODO replace pyramid of doom with named callback functions
-				fs.writeFile('./data/score.json',JSON.stringify(currentScore), (err) => {
-					if (err) {
-						throw err
+					if (parseInt(computerCard.rating) > parseInt(playerCard.rating)) {
+						currentScore.p2 += 1
 					}
-					console.log(computerDeck)
-					fs.writeFile('./data/computerdeck.json', JSON.stringify(computerDeck), (err) => {
+					else {
+						currentScore.p1 += 1
+					}
+					//TEST add callbacks for savescore and savecomputerdeck and nest reply inside there
+					//TODO replace pyramid of doom with named callback functions
+					fs.writeFile('./data/score.json',JSON.stringify(currentScore), (err) => {
 						if (err) {
 							throw err
 						}
-						console.log('saved new computerdeck data')
-						reply(currentScore)
+						fs.writeFile('./data/computerdeck.json', JSON.stringify(computerDeck), (err) => {
+							if (err) {
+								throw err
+							}
+							console.log('saved new computerdeck data')
+							reply(currentScore)
+						})
 					})
 				})
-			})
+			}
 		})		
 
 	}
