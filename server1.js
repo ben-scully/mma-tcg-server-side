@@ -21,12 +21,13 @@ server.route({
 	method: 'GET',
 	path: '/new',
 	handler: (request, reply) => {
-		fs.readFile('./data/playerDeck.json', (err, data) => {
+		fs.readFile('./data/deck.json', (err, data) => {
 			if (err) {
 				throw err
 			}
 			reply(data)
 		})
+
 	}
 })
 
@@ -34,26 +35,26 @@ server.route({
 	method: 'POST',
 	path: '/round',
 	handler: (request, reply) => {
+		//console.log('req', request)
 		//read the computers deck
 		fs.readFile('./data/computerdeck.json', (err, data) => {
 			var computerDeck = JSON.parse(data)
-			//read the current score
+		//read the current score
 			fs.readFile('./data/score.json', (err, data) => {
 				var currentScore = JSON.parse(data)
-				//pops off the card the computer will play and compares it to the players submitted card
+		//pops off the card the computer will play and compares it to the players submitted card
 				var computerCard = computerDeck.pop()
-				//TEST check whether needs parsing
 				var playerCard = request.payload
-
+				//console.log(request.payload)
 				if (computerCard.rating > playerCard.rating) {
-					currentScore.p1 += 1
+					currentScore.playerOne += 1
 				}
 				else {
-					currentScore.p2 += 1
+					currentScore.playerTwo += 1
 				}
-				//TODO add callbacks for savescore and savecomputerdeck and nest reply inside there
 				saveScore(JSON.stringify(currentScore))
-				// saveComputerDeck(JSON.stringify(computerDeck))
+				saveComputerDeck(JSON.stringify(computerDeck))
+				//console.log('reply', currentScore)
 				reply(currentScore)
 			})
 		})
