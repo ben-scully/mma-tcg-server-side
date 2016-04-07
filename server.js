@@ -38,26 +38,25 @@ server.route({
 
 		//read the computers deck
 		fs.readFile('./data/computerdeck.json', (err, data) => {
-			var computerDeck = data
-			console.log(data)
-		// //read the current score
-		// 	fs.readFile('./data/score.json', (err, data) => {
-		// 		var currentScore = data
-		// //pops off the card the computer will play and compares it to the players submitted card
-		// 		var computerCard = computerDeck.pop()
-		// 		var playerCard = request.payload
-		// 		console.log(request.payload)
+			var computerDeck = JSON.parse(data)
+		//read the current score
+			fs.readFile('./data/score.json', (err, data) => {
+				var currentScore = JSON.parse(data)
+		//pops off the card the computer will play and compares it to the players submitted card
+				var computerCard = computerDeck.pop()
+				var playerCard = request.payload
+				//console.log(request.payload)
 
-		// 		if (computerCard.rating > playerCard.rating) {
-		// 			currentScore.playerOne += 1
-		// 		}
-		// 		else {
-		// 			currentScore.playerTwo += 1
-		// 		}
-		// 		saveScore(currentScore)
-		// 		saveComputerDeck(computerDeck)
-		// 		reply(currentScore)
-		// 	})
+				if (computerCard.rating > playerCard.rating) {
+					currentScore.playerOne += 1
+				}
+				else {
+					currentScore.playerTwo += 1
+				}
+				saveScore(JSON.stringify(currentScore))
+				saveComputerDeck(JSON.stringify(computerDeck))
+				reply(currentScore)
+			})
 		})		
 
 	}
