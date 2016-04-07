@@ -24,7 +24,7 @@ describe("Server Initiation", function(){
 
 describe('New Game', function(){
   describe('Get initial deck', function(){
-    it('should return a deck array with 3 cards', function(){
+    it('should return a deck array with 3 cards', function(done){
       var expectedDeckJson = fs.readFileSync('../data/deck.json', 'utf8')
         hapiTest({server: server})
           .get('/new')
@@ -40,7 +40,16 @@ describe('New Game', function(){
 
 describe('Round', function(){
   describe('One round', function(){
-    it('should take a card and return a bout score')
+    it('should take a card and return a bout score', function(done){
+      hapiTest({server: server})
+        .post('/round')
+        .send({"name": "Fighter One", "img": "test.jpg" ,"rating": 100})
+        .end(function(result){
+          console.log(result)
+          done()
+        })
+
+    })
     it('it should return -1 if the card is invalid')
   })
 })
