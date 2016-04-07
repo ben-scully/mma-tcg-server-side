@@ -26,12 +26,25 @@ describe('New Game', function(){
   describe('Get initial deck', function(){
     it('should return a deck array with 3 cards', function(done){
       var expectedDeckJson = fs.readFileSync('./data/playerDeck.json', 'utf8')
-        hapiTest({server: server})
-          .get('/new')
-          .end(function(result){
-            assert.deepEqual(result.payload, expectedDeckJson, 'Api call to /new gives a 3 card deck')
-            done()
-          })
+      hapiTest({server: server})
+        .get('/new')
+        .end(function(result){
+          assert.deepEqual(result.payload, expectedDeckJson, 'Api call to /new gives a 3 card deck')
+          done()
+        })
+    })
+    it('should return a deck array of 3 cards even if we take a card already', function(done){
+      hapiTest({server: server})
+        .post('/round', {"name": "Fighter One", "img": "test.jpg" ,"rating": 100})
+        .end(function(result){
+          var expectedDeckJson = fs.readFileSync('./data/playerDeck.json', 'utf8')
+          hapiTest({server: server})
+            .get('/new')
+            .end(function(result){
+              assert.deepEqual(result.payload, expectedDeckJson, 'Api call to /new gives a 3 card deck')
+              done()
+            })
+        })
     })
   })
 })
@@ -43,11 +56,9 @@ describe('Round', function(){
       hapiTest({server: server})
         .post('/round', {"name": "Fighter One", "img": "test.jpg" ,"rating": 100})
         .end(function(result){
-          console.log(result.payload)
-
           var scoreObject = JSON.parse(result.payload)
-          assert.notEqual(Object.keys(scoreObject).indexOf('playerOne'), -1 ,'player one in the score object exists')
-          assert.notEqual(Object.keys(scoreObject).indexOf('playerTwo'), -1 ,'player two in the score object exists')
+          assert.notEqual(Object.keys(scoreObject).indexOf('p1'), -1 ,'player one score in the score object exists')
+          assert.notEqual(Object.keys(scoreObject).indexOf('p2'), -1 ,'player two score in the score object exists')
           done()
         })
     })
@@ -55,7 +66,6 @@ describe('Round', function(){
       hapiTest({server: server})
         .post('/round', {})
         .end(function(result){
-          console.log('empty string result', result.payload)
           //var scoreObject = JSON.parse(result.payload)
           //console.log('scoreobject', scoreObject)
           //var score = scoreObject.playerOne + scoreObject.playerTwo
