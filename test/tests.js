@@ -43,9 +43,11 @@ describe('Round', function(){
       hapiTest({server: server})
         .post('/round', {"name": "Fighter One", "img": "test.jpg" ,"rating": 100})
         .end(function(result){
-          console.log(result)
-          //var scoreObject = result.payload
-          //var score = scoreObject.playerOne + scoreObject.playerTwo
+          //console.log(result.payload)
+          var scoreObject = JSON.parse(result.payload)
+          console.log('scoreobject', scoreObject)
+          var score = scoreObject.playerOne + scoreObject.playerTwo
+          console.log("SCORE", score)
           //assert.equal(score, 1)
           done()
         })
