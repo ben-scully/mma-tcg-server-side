@@ -43,17 +43,20 @@ server.route({
 				//pops off the card the computer will play and compares it to the players submitted card
 				var computerCard = computerDeck.pop()
 				//TEST check whether needs parsing
-				var playerCard = request.payload
+				var playerCard = JSON.parse(request.payload)
 
-				if (computerCard.rating > playerCard.rating) {
-					currentScore.p1 += 1
+				console.log('computerCard: ', computerCard.rating, typeof computerCard.rating)
+				console.log('playercard: ', playerCard.rating, typeof playerCard.rating)
+
+				if (parseInt(computerCard.rating) > parseInt(playerCard.rating)) {
+					currentScore.p2 += 1
 				}
 				else {
-					currentScore.p2 += 1
+					currentScore.p1 += 1
 				}
 				//TODO add callbacks for savescore and savecomputerdeck and nest reply inside there
 				saveScore(JSON.stringify(currentScore))
-				// saveComputerDeck(JSON.stringify(computerDeck))
+				saveComputerDeck(JSON.stringify(computerDeck))
 				reply(currentScore)
 			})
 		})		
