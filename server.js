@@ -21,7 +21,7 @@ server.route({
 	method: 'GET',
 	path: '/new',
 	handler: (request, reply) => {
-		fs.readFile('./data/deck.json', (err, data) => {
+		fs.readFile('./data/playerDeck.json', (err, data) => {
 			if (err) {
 				throw err
 			}
@@ -54,7 +54,7 @@ server.route({
 					currentScore.playerTwo += 1
 				}
 				saveScore(JSON.stringify(currentScore))
-				saveComputerDeck(JSON.stringify(computerDeck))
+				// saveComputerDeck(JSON.stringify(computerDeck))
 				console.log('reply', currentScore)
 				reply(currentScore)
 			})
