@@ -17,6 +17,7 @@ server.start((err) => {
 	console.log('server running at ', server.info.uri)
 })
 
+//set up for a new game
 server.route({
 	method: 'GET',
 	path: '/new',
@@ -25,6 +26,7 @@ server.route({
 			if (err) {
 				throw err
 			}
+			replaceComputerDefault()
 			reply(data)
 		})
 	}
@@ -37,6 +39,12 @@ server.route({
 		//read the computers deck
 		fs.readFile('./data/computerdeck.json', (err, data) => {
 			var computerDeck = JSON.parse(data)
+
+			//early return for if array is empty
+			if (computerDeck.length < 1) {
+				reply('Error: No cards left').code(400)
+			}
+
 			//read the current score
 			fs.readFile('./data/score.json', (err, data) => {
 				var currentScore = JSON.parse(data)
@@ -52,17 +60,17 @@ server.route({
 					currentScore.p1 += 1
 				}
 				//TEST add callbacks for savescore and savecomputerdeck and nest reply inside there
-				// saveScore(JSON.stringify(currentScore), function ())
-				// saveComputerDeck(JSON.stringify(computerDeck))
-				// reply(currentScore)
-				fs.writeFile('./data/score.json', (err) => {
+				//TODO replace pyramid of doom with named callback functions
+				fs.writeFile('./data/score.json',JSON.stringify(currentScore), (err) => {
 					if (err) {
 						throw err
 					}
-					fs.writeFile('./data.computerdeck.json', (err) => {
+					console.log(computerDeck)
+					fs.writeFile('./data/computerdeck.json', JSON.stringify(computerDeck), (err) => {
 						if (err) {
 							throw err
 						}
+						console.log('saved new computerdeck data')
 						reply(currentScore)
 					})
 				})
@@ -72,23 +80,6 @@ server.route({
 	}
 })
 
-// function saveScore (data, callback) {
-// 	fs.writeFile('./data/score.json', data, (err) => {
-// 		if (err) {
-// 			callback(err)
-// 		}
-// 		callback(null, data)
-// 	})
-// }
-
-// function saveComputerDeck (data) {
-// 	fs.writeFile('./data/computerdeck.json', data, (err) => {
-// 		if (err) {
-// 			console.error(err)
-// 		}
-// 	})
-// }
-
 server.route({
 	method: 'GET',
 	path: '/',
@@ -96,5 +87,19 @@ server.route({
 		reply('MMA:TCG version: 0.0.1')
 	}
 })
+
+function replaceComputerDefault () {
+	fs.readFile('./data/defaultcomputerdeck.json', (err, data) => {
+		if (err) {
+			throw err
+		}
+		fs.writeFile('./data/computerdeck.json', data, (err) => {
+			if(err) {
+				throw err
+			}
+			console.log('replaced computer deck with default values')
+		})
+	})
+}
 
 exports = module.exports = server
