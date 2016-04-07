@@ -4,7 +4,7 @@
   "description": "server side mma-tcg",
   "main": "server.js",
   "scripts": {
-    "test": "mocha ./test/test.js"
+    "test": "mocha ./test/tests.js"
   },
   "repository": {
     "type": "git",
