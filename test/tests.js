@@ -29,8 +29,7 @@ describe('New Game', function(){
         hapiTest({server: server})
           .get('/new')
           .end(function(result){
-            //assert.deepEqual(result.payload, expectedDeckJson, 'Api call to /new gives a 3 card deck')
-            //console.log(result.payload)
+            assert.deepEqual(result.payload, expectedDeckJson, 'Api call to /new gives a 3 card deck')
             done()
           })
     })
@@ -42,10 +41,12 @@ describe('Round', function(){
   describe('One round', function(){
     it('should take a card and return a bout score', function(done){
       hapiTest({server: server})
-        .post('/round')
-        .send({"name": "Fighter One", "img": "test.jpg" ,"rating": 100})
+        .post('/round', {"name": "Fighter One", "img": "test.jpg" ,"rating": 100})
         .end(function(result){
           console.log(result)
+          var scoreObject = result.payload
+          var score = scoreObject.playerOne + scoreObject.playerTwo
+          assert.equal(score, 1)
           done()
         })
 
