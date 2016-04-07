@@ -4,7 +4,7 @@ const Hapi = require('hapi')
 
 const server = new Hapi.Server()
 server.connection(
-	{ 
+	{
 		port: 8000,
 		routes: { cors: true }
 	}
@@ -27,7 +27,7 @@ server.route({
 			}
 			reply(data)
 		})
-		
+
 	}
 })
 
@@ -35,6 +35,7 @@ server.route({
 	method: 'POST',
 	path: '/round',
 	handler: (request, reply) => {
+
 		//read the computers deck
 		fs.readFile('./data/computerdeck.json', (err, data) => {
 			var computerDeck = data
@@ -56,8 +57,9 @@ server.route({
 		// 		saveScore(currentScore)
 		// 		saveComputerDeck(computerDeck)
 		// 		reply(currentScore)
-			})
+		// 	})
 		})		
+
 	}
 })
 
