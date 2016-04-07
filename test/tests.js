@@ -49,7 +49,6 @@ describe('Round', function(){
           assert.equal(score, 1)
           done()
         })
-
     })
     it('it should return -1 if the card is invalid')
   })
