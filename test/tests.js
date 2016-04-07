@@ -1,5 +1,5 @@
 var hapiTest = require('hapi-test')
-var Hapi = require('Hapi')
+var Hapi = require('hapi')
 var assert = require('chai').assert
 var should = require('chai').should()
 var fs = require('fs')
@@ -25,7 +25,7 @@ describe("Server Initiation", function(){
 describe('New Game', function(){
   describe('Get initial deck', function(){
     it('should return a deck array with 3 cards', function(done){
-      var expectedDeckJson = fs.readFileSync('../data/deck.json', 'utf8')
+      var expectedDeckJson = fs.readFileSync('./data/playerDeck.json', 'utf8')
         hapiTest({server: server})
           .get('/new')
           .end(function(result){
@@ -44,15 +44,26 @@ describe('Round', function(){
         .post('/round', {"name": "Fighter One", "img": "test.jpg" ,"rating": 100})
         .end(function(result){
           //console.log(result.payload)
+
           var scoreObject = JSON.parse(result.payload)
-          console.log('scoreobject', scoreObject)
-          var score = scoreObject.playerOne + scoreObject.playerTwo
-          console.log("SCORE", score)
+          assert.notEqual(Object.keys(scoreObject).indexOf('playerOne'), -1 ,'player one in the score object exists')
+          assert.notEqual(Object.keys(scoreObject).indexOf('playerTwo'), -1 ,'player two in the score object exists')
+          done()
+        })
+    })
+    it('it should return -1 if the card is invalid', function(done) {
+      hapiTest({server: server})
+        .post('/round', {})
+        .end(function(result){
+          console.log('empty string result', result.payload)
+          //var scoreObject = JSON.parse(result.payload)
+          //console.log('scoreobject', scoreObject)
+          //var score = scoreObject.playerOne + scoreObject.playerTwo
+          //console.log("SCORE", score)
           //assert.equal(score, 1)
           done()
         })
     })
-    it('it should return -1 if the card is invalid')
   })
 })
 
