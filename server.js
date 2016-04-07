@@ -35,7 +35,7 @@ server.route({
 	method: 'POST',
 	path: '/round',
 	handler: (request, reply) => {
-
+		console.log('req', request)
 		//read the computers deck
 		fs.readFile('./data/computerdeck.json', (err, data) => {
 			var computerDeck = JSON.parse(data)
@@ -55,6 +55,7 @@ server.route({
 				}
 				saveScore(JSON.stringify(currentScore))
 				saveComputerDeck(JSON.stringify(computerDeck))
+				console.log('reply', currentScore)
 				reply(currentScore)
 			})
 		})		
