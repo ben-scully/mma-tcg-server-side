@@ -21,7 +21,7 @@ server.route({
 	method: 'GET',
 	path: '/new',
 	handler: (request, reply) => {
-		fs.readFile('./deck.json', (err, data) => {
+		fs.readFile('./data/deck.json', (err, data) => {
 			if (err) {
 				throw err
 			}
@@ -35,32 +35,53 @@ server.route({
 	method: 'POST',
 	path: '/round',
 	handler: (request, reply) => {
-		fs.readFile('./deck.json', (err, data) => {
-			var roundObj = {
-				"playerOne": 0,
-				"playerTwo": 0,
-				"win": false
-			}
-			console.log(request.payload)
-			//var playerCard = payload something
-			var computerDeck = data.array
-			var computerCard = computerDeck.pop()
-			if (computerCard.rating > playerCard.rating) {
-				roundObj.playerOne += 1
-			}
-			else {
-				roundObj.playerTwo += 1
-			}
-			reply(roundObj)
+		//read the computers deck
+		fs.readFile('./data/computerdeck.json', (err, data) => {
+			var computerDeck = data
+			console.log(data)
+		// //read the current score
+		// 	fs.readFile('./data/score.json', (err, data) => {
+		// 		var currentScore = data
+		// //pops off the card the computer will play and compares it to the players submitted card
+		// 		var computerCard = computerDeck.pop()
+		// 		var playerCard = request.payload
+		// 		console.log(request.payload)
+
+		// 		if (computerCard.rating > playerCard.rating) {
+		// 			currentScore.playerOne += 1
+		// 		}
+		// 		else {
+		// 			currentScore.playerTwo += 1
+		// 		}
+		// 		saveScore(currentScore)
+		// 		saveComputerDeck(computerDeck)
+		// 		reply(currentScore)
+			})
 		})		
 	}
 })
+
+function saveScore (data) {
+	fs.writeFile('./data/score.json', data, (err) => {
+		if (err) {
+			console.error(err)
+		}
+	})
+}
+
+function saveComputerDeck (data) {
+	fs.writeFile('./data/computerdeck.json', data, (err) => {
+		if (err) {
+			console.error(err)
+		}
+	})
+}
 
 server.route({
 	method: 'GET',
 	path: '/',
 	handler: (request, reply) => {
-		reply('hellllllllo')
+		reply('MMA:TCG version: 0.0.1')
 	}
 })
 
