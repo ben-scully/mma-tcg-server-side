@@ -4,7 +4,7 @@ const Hapi = require('hapi')
 
 const server = new Hapi.Server()
 server.connection(
-	{ 
+	{
 		port: 8000,
 		routes: { cors: true }
 	}
@@ -27,7 +27,7 @@ server.route({
 			}
 			reply(data)
 		})
-		
+
 	}
 })
 
@@ -52,7 +52,7 @@ server.route({
 				roundObj.playerTwo += 1
 			}
 			reply(roundObj)
-		})		
+		})
 	}
 })
 

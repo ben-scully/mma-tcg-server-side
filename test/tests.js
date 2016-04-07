@@ -2,6 +2,7 @@ var hapiTest = require('hapi-test')
 var Hapi = require('Hapi')
 var assert = require('chai').assert
 var should = require('chai').should()
+var fs = require('fs')
 
 var server = require('../server')
 
@@ -11,11 +12,11 @@ describe("Server Initiation", function(){
           .get('/')
           .assert(200, done)
   })
-  it('Root should return the api', function(done) {
+  it('Root should return the api version number', function(done) {
     hapiTest({server: server})
       .get('/')
       .end(function(result){
-
+        assert.equal(result.payload, "MMA:TCG version: 0.0.1", "call to root returns correct version number")
         done()
     })
   })
@@ -23,7 +24,16 @@ describe("Server Initiation", function(){
 
 describe('New Game', function(){
   describe('Get initial deck', function(){
-    it('should return a deck array with 3 cards')
+    it('should return a deck array with 3 cards', function(){
+      var expectedDeckJson = fs.readFileSync('../data/deck.json', 'utf8')
+        hapiTest({server: server})
+          .get('/new')
+          .end(function(result){
+            //assert.deepEqual(result.payload, expectedDeckJson, 'Api call to /new gives a 3 card deck')
+            //console.log(result.payload)
+            done()
+          })
+    })
   })
 })
 
