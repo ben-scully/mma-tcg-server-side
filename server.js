@@ -43,39 +43,51 @@ server.route({
 				//pops off the card the computer will play and compares it to the players submitted card
 				var computerCard = computerDeck.pop()
 				//TEST check whether needs parsing
-				var playerCard = request.payload
+				var playerCard = JSON.parse(request.payload)
 
-				if (computerCard.rating > playerCard.rating) {
-					currentScore.p1 += 1
-				}
-				else {
+				if (parseInt(computerCard.rating) > parseInt(playerCard.rating)) {
 					currentScore.p2 += 1
 				}
-				//TODO add callbacks for savescore and savecomputerdeck and nest reply inside there
-				saveScore(JSON.stringify(currentScore))
+				else {
+					currentScore.p1 += 1
+				}
+				//TEST add callbacks for savescore and savecomputerdeck and nest reply inside there
+				// saveScore(JSON.stringify(currentScore), function ())
 				// saveComputerDeck(JSON.stringify(computerDeck))
-				reply(currentScore)
+				// reply(currentScore)
+				fs.writeFile('./data/score.json', (err) => {
+					if (err) {
+						throw err
+					}
+					fs.writeFile('./data.computerdeck.json', (err) => {
+						if (err) {
+							throw err
+						}
+						reply(currentScore)
+					})
+				})
 			})
 		})
 
 	}
 })
 
-function saveScore (data) {
-	fs.writeFile('./data/score.json', data, (err) => {
-		if (err) {
-			console.error(err)
-		}
-	})
-}
+// function saveScore (data, callback) {
+// 	fs.writeFile('./data/score.json', data, (err) => {
+// 		if (err) {
+// 			callback(err)
+// 		}
+// 		callback(null, data)
+// 	})
+// }
 
-function saveComputerDeck (data) {
-	fs.writeFile('./data/computerdeck.json', data, (err) => {
-		if (err) {
-			console.error(err)
-		}
-	})
-}
+// function saveComputerDeck (data) {
+// 	fs.writeFile('./data/computerdeck.json', data, (err) => {
+// 		if (err) {
+// 			console.error(err)
+// 		}
+// 	})
+// }
 
 server.route({
 	method: 'GET',
