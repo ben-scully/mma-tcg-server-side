@@ -52,7 +52,12 @@ server.route({
 					//pops off the card the computer will play and compares it to the players submitted card
 					var computerCard = computerDeck.pop()
 					//TEST check whether needs parsing
-					var playerCard = JSON.parse(request.payload)
+					try (
+						var playerCard = JSON.parse(request.payload)
+					) catch (err) {
+						var playerCard= request.payload
+					}
+					
 
 					if (parseInt(computerCard.rating) > parseInt(playerCard.rating)) {
 						currentScore.p2 += 1
