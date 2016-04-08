@@ -26,11 +26,7 @@ server.route({
 			if (err) {
 				throw err
 			}
-<<<<<<< HEAD
 			resetScoresToZero()
-=======
-			replaceDefaultScore()
->>>>>>> 5d8e3ba38a884c324f6352ab4bda8da8fb34a728
 			replaceComputerDefault()
 			reply(data)
 		})
@@ -79,7 +75,7 @@ server.route({
 
 					if(!playerCard.rating) {
 						reply('Err: Not a valid card').code(400)
-					}				
+					}
 
 					if (parseInt(computerCard.rating) > parseInt(playerCard.rating)) {
 						currentScore.p2 += 1
@@ -103,7 +99,7 @@ server.route({
 					})
 				})
 			}
-		})		
+		})
 	}
 })
 
