@@ -2,6 +2,10 @@
 const fs = require('fs')
 const Hapi = require('hapi')
 
+const shuffleArray = require('.sorting/shuffle')
+const shuffleHiLo = require('.sorting/HiLo')
+const shuffleLoHi = require('.sorting/Lohi')
+
 const server = new Hapi.Server()
 server.connection(
 	{
@@ -54,6 +58,8 @@ server.route({
 		//read the computers deck
 		fs.readFile('./data/computerdeck.json', (err, data) => {
 			var computerDeck = JSON.parse(data)
+			//shuffle the computer deck randomly
+			computerDeck = shuffleArray(computerDeck)
 
 			//early return for if array is empty
 			if (computerDeck.length < 1) {
@@ -99,6 +105,19 @@ server.route({
 					})
 				})
 			}
+		})
+	}
+})
+
+server.route({
+	method: 'GET',
+	path: '/test/cd',
+	handler: (request, reply) => {
+		fs.readFile('./data/computerdeck.json', (err, data) => {
+			if (err) {
+				throw err
+			}
+			reply(data)
 		})
 	}
 })
