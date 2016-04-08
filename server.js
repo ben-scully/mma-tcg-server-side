@@ -2,9 +2,9 @@
 const fs = require('fs')
 const Hapi = require('hapi')
 
-const shuffleArray = require('.sorting/shuffle')
-const shuffleHiLo = require('.sorting/HiLo')
-const shuffleLoHi = require('.sorting/Lohi')
+const shuffleArray = require('./sorting/shuffle')
+const shuffleHiLo = require('./sorting/HiLo')
+const shuffleLoHi = require('./sorting/LoHi')
 
 const server = new Hapi.Server()
 server.connection(
@@ -37,19 +37,6 @@ server.route({
 	}
 })
 
-function resetScoresToZero() {
-	fs.readFile('./data/defaultscore.json', (err, data) => {
-		if (err) {
-			throw err
-		}
-		fs.writeFile('./data/score.json', data, (err) => {
-			if(err) {
-				throw err
-			}
-			console.log('reset scores to zero')
-		})
-	})
-}
 
 server.route({
 	method: 'POST',
@@ -130,6 +117,8 @@ server.route({
 	}
 })
 
+
+
 function replaceComputerDefault () {
 	fs.readFile('./data/defaultcomputerdeck.json', (err, data) => {
 		if (err) {
@@ -144,7 +133,7 @@ function replaceComputerDefault () {
 	})
 }
 
-function replaceDefaultScore () {
+function resetScoresToZero () {
 	fs.readFile('./data/defaultscore.json', (err, data) => {
 		if (err) {
 			throw err
@@ -153,9 +142,10 @@ function replaceDefaultScore () {
 			if(err) {
 				throw err
 			}
-			console.log('replaced score with default values')
+			console.log('reset scores to zero')
 		})
 	})
 }
+
 
 exports = module.exports = server
