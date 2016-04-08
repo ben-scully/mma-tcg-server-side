@@ -105,6 +105,19 @@ server.route({
 
 server.route({
 	method: 'GET',
+	path: '/test/cd',
+	handler: (request, reply) => {
+		fs.readFile('./data/computerdeck.json', (err, data) => {
+			if (err) {
+				throw err
+			}
+			reply(data)
+		})
+	}
+})
+
+server.route({
+	method: 'GET',
 	path: '/',
 	handler: (request, reply) => {
 		reply('MMA:TCG version: 0.0.1')
