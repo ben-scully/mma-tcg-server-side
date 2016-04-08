@@ -26,11 +26,26 @@ server.route({
 			if (err) {
 				throw err
 			}
+			resetScoresToZero()
 			replaceComputerDefault()
 			reply(data)
 		})
 	}
 })
+
+function resetScoresToZero() {
+	fs.readFile('./data/defaultscore.json', (err, data) => {
+		if (err) {
+			throw err
+		}
+		fs.writeFile('./data/score.json', data, (err) => {
+			if(err) {
+				throw err
+			}
+			console.log('reset scores to zero')
+		})
+	})
+}
 
 server.route({
 	method: 'POST',
@@ -51,7 +66,15 @@ server.route({
 					//pops off the card the computer will play and compares it to the players submitted card
 					var computerCard = computerDeck.pop()
 					//TEST check whether needs parsing
-					var playerCard = JSON.parse(request.payload)
+					try {
+						var playerCard = JSON.parse(request.payload)
+					} catch (err) {
+						var playerCard = request.payload
+					}
+
+					if(!playerCard.rating) {
+						reply('Err: Not a valid card').code(400)
+					}				
 
 					if (parseInt(computerCard.rating) > parseInt(playerCard.rating)) {
 						currentScore.p2 += 1
