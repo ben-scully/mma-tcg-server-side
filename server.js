@@ -26,7 +26,11 @@ server.route({
 			if (err) {
 				throw err
 			}
+<<<<<<< HEAD
 			resetScoresToZero()
+=======
+			replaceDefaultScore()
+>>>>>>> 5d8e3ba38a884c324f6352ab4bda8da8fb34a728
 			replaceComputerDefault()
 			reply(data)
 		})
@@ -66,6 +70,7 @@ server.route({
 					//pops off the card the computer will play and compares it to the players submitted card
 					var computerCard = computerDeck.pop()
 					//TEST check whether needs parsing
+
 					try {
 						var playerCard = JSON.parse(request.payload)
 					} catch (err) {
@@ -120,6 +125,20 @@ function replaceComputerDefault () {
 				throw err
 			}
 			console.log('replaced computer deck with default values')
+		})
+	})
+}
+
+function replaceDefaultScore () {
+	fs.readFile('./data/defaultscore.json', (err, data) => {
+		if (err) {
+			throw err
+		}
+		fs.writeFile('./data/score.json', data, (err) => {
+			if(err) {
+				throw err
+			}
+			console.log('replaced score with default values')
 		})
 	})
 }
