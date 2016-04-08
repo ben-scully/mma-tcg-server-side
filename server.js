@@ -26,6 +26,7 @@ server.route({
 			if (err) {
 				throw err
 			}
+			replaceDefaultScore()
 			replaceComputerDefault()
 			reply(data)
 		})
@@ -97,6 +98,20 @@ function replaceComputerDefault () {
 				throw err
 			}
 			console.log('replaced computer deck with default values')
+		})
+	})
+}
+
+function replaceDefaultScore () {
+	fs.readFile('./data/defaultscore.json', (err, data) => {
+		if (err) {
+			throw err
+		}
+		fs.writeFile('./data/score.json', data, (err) => {
+			if(err) {
+				throw err
+			}
+			console.log('replaced score with default values')
 		})
 	})
 }
